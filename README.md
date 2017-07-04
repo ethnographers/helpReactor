@@ -40,13 +40,10 @@ npm install
 
 #### Create and Start Database
 
-The `npm db-create` and `db-init` commands only need to be run once.
+The `npm db-setup` command only needs to be run once.
 
 ```sh
-npm run db-create
-npm run db-start
-npm run db-init
-
+npm run db-setup
 ```
 
 #### Migrate and Seed Database
