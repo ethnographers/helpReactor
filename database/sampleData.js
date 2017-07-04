@@ -44,15 +44,15 @@ module.exports.users = [
   {
     "firstName": "Melisenda",
     "lastName": "Kloisner",
-    "username": "melisenda_kloisner",
-    "role": "student",
+    "username": "glasscamptesting",
+    "role": "admin",
     "cohort": "HRSF-77"
   },
   {
     "firstName": "Kaylee",
     "lastName": "Gurden",
-    "username": "kaylee_gurden",
-    "role": "student",
+    "username": "campreactor",
+    "role": "mentor",
     "cohort": "HRSF-78"
   },
   {
