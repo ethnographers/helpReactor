@@ -1,43 +1,43 @@
 module.exports.users = [
   {
-    "firstName":"Eric",
-    "lastName":"Mai",
-    "username":"enmai1988",
+    "firstName":"El",
+    "lastName":"Azmeer",
+    "username":"azmeer",
     "role":"admin",
     "cohort":"HRSF-77"
   },
   {
-    "firstName": "David",
-    "lastName": "Vassett",
-    "username": "DavidVassett",
+    "firstName": "The",
+    "lastName": "Bonkula",
+    "username": "bonkula",
     "role": "mentor",
     "cohort": "HRSF-78"
   },
   {
-    "firstName": "Jacob",
-    "lastName": "Penney",
-    "username": "OneCent01",
+    "firstName": "Random",
+    "lastName": "User",
+    "username": "poetisawesome",
     "role": "student",
     "cohort": null
   },
   {
-    "firstName": "David",
-    "lastName": "Gould",
-    "username": "david.gould112",
-    "role": "student",
+    "firstName": "Kenneth",
+    "lastName": "So",
+    "username": "ethnographers",
+    "role": "mentor",
     "cohort": "HRSF-77"
   },
   {
-    "firstName": "Jeffrey",
-    "lastName": "Filippello",
-    "username": "jeffrey_filippello",
+    "firstName": "Sheyda",
+    "lastName": "Rezaee",
+    "username": "sheydarezaee",
     "role": "student",
     "cohort": "HRSF-78"
   },
   {
-    "firstName": "Helenelizabeth",
-    "lastName": "Bedson",
-    "username": "helenelizabeth_bedson",
+    "firstName": "Wesley",
+    "lastName": "Choi",
+    "username": "weschoi",
     "role": "student",
     "cohort": "HRSF-78"
   },
