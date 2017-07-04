@@ -286,7 +286,7 @@ module.exports.tickets = [
     "closedAt": "2017-06-10 12:46:10",
     "updatedAt": "2017-06-10 12:46:10",
     "status": "Closed",
-    "userId": 20
+    "userId": 19
   },
   {
     "category": "Recursion",
