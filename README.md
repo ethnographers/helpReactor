@@ -40,12 +40,13 @@ npm install
 
 #### Create and Start Database
 
-The `npm db-create` and `create helpReactor` commands only need to be run once.
+The `npm db-create` and `db-init` commands only need to be run once.
 
 ```sh
 npm run db-create
 npm run db-start
-createdb helpReator
+npm run db-init
+
 ```
 
 #### Migrate and Seed Database
@@ -68,12 +69,6 @@ Once you are connected to the database you can you the below query to update a u
 
 ```sh
 UPDATE users SET role='admin' WHERE id=1;
-```
-
-#### Create Database
-
-```sh
-npm run db-create
 ```
 
 ### Setup Redis
