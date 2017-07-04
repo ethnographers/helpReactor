@@ -14,7 +14,9 @@ const findTickets = (req, res) => {
   let option = {};
   let query = req.query;
   if (query.role === 'student') {
-    option = { userId: query.id };
+    option = {
+      status: ['Opened', 'Claimed']
+    };
   } else if (query.role === 'mentor') {
     option = {
       status: ['Opened', 'Claimed'],
@@ -34,8 +36,8 @@ const findTickets = (req, res) => {
     include: [ { model: User, as: 'user' }, { model: User, as: 'userClaimed' } ],
     order: [
       [db.literal(`CASE
-        WHEN status = 'Claimed' THEN 1
-        WHEN status = 'Opened' THEN 2
+        WHEN status = 'Claimed' THEN ${query.role !== 'student' ? 1 : 2}
+        WHEN status = 'Opened' THEN ${query.role !== 'student' ? 2 : 1}
         WHEN status = 'Closed' THEN 3
         END`
       )],
