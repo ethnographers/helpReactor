@@ -12,6 +12,8 @@
     "postinstall": "webpack -p --config ./webpack.config.js --progress && node ./database/migrate.js",
     "db-create": "initdb database/db",
     "db-start": "pg_ctl -D database/db -l logfile start",
+    "db-init": "createdb helpReactor",
+    "db-stop": "pg_ctl -D database/db -l logfile stop",
     "db-migrate": "node database/migrate.js"
   },
   "repository": {
@@ -37,6 +39,7 @@
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "moment": "^2.18.1",
+    "morgan-body": "^0.9.5",
     "passport": "^0.3.2",
     "passport-github": "^1.1.0",
     "pg": "^6.4.0",

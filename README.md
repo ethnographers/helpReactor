@@ -38,7 +38,7 @@ npm install
 
 ### Setup Database
 
-#### Create Database
+#### Create Database Files
 
 ```sh
 npm run db-create
@@ -48,6 +48,12 @@ npm run db-create
 
 ```sh
 npm run db-start
+```
+
+#### Create helpReactor Database
+
+```sh
+npm run db-init
 ```
 
 #### Migrate and Seed Database
@@ -70,12 +76,6 @@ Once you are connected to the database you can you the below query to update a u
 
 ```sh
 UPDATE users SET role='admin' WHERE id=1;
-```
-
-#### Create Database
-
-```sh
-npm run db-create
 ```
 
 ### Setup Redis
