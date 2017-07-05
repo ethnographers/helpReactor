@@ -13,7 +13,13 @@ const createTicket = (req, res) => {
 const findTickets = (req, res) => {
   let option = {};
   let query = req.query;
+  let claimedOrder = 1;
+  let openedOrder = 2;
+  let closedOrder = 3;
+  
   if (query.role === 'student') {
+    openedOrder = 1;
+    claimedOrder = 2;
     option = {
       status: ['Opened', 'Claimed']
     };
@@ -36,9 +42,9 @@ const findTickets = (req, res) => {
     include: [ { model: User, as: 'user' }, { model: User, as: 'userClaimed' } ],
     order: [
       [db.literal(`CASE
-        WHEN status = 'Claimed' THEN ${query.role !== 'student' ? 1 : 2}
-        WHEN status = 'Opened' THEN ${query.role !== 'student' ? 2 : 1}
-        WHEN status = 'Closed' THEN 3
+        WHEN status = 'Claimed' THEN ${claimedOrder}
+        WHEN status = 'Opened' THEN ${openedOrder}
+        WHEN status = 'Closed' THEN ${closedOrder}
         END`
       )],
       ['updatedAt', 'DESC']
