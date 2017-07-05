@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const SeatingChart = ({clickSeating}) => (
+
   <div>	
     <div className='mentor-section'>HIR Table</div>
 
