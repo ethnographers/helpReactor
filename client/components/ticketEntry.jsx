@@ -33,7 +33,7 @@ class TicketEntry extends React.Component {
       time = `closed ${moment(this.props.ticket.closedAt).from(this.state.now)}`;
     }
 
-    if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id) {
+    if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id && this.props.user.role !== 'student') {
       claimButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })} type="button" className="btn btn-xs btn-primary claim_btn">Claim</button>;
     }
 

@@ -30,6 +30,7 @@ config/
 database/db
 database/logfile
 database/helpReactor
+dump.rdb
 
 # editor artifacts
 *.swp
