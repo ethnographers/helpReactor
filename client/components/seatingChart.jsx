@@ -58,7 +58,4 @@ const SeatingChart = ({clickSeating}) => (
   </div>
 );
 
-
-// const SeatingChart = () => ( <div> HEY! </div> );
-
 export default SeatingChart;
