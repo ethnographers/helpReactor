@@ -8,6 +8,7 @@ import Alert from './components/alert.jsx';
 import Nav from './components/nav.jsx';
 import Header from './components/header.jsx';
 import AdminDashboard from './components/adminDashboard.jsx';
+import SeatingChart from './components/seatingChart.jsx';
 
 class App extends React.Component {
   constructor() {
@@ -201,6 +202,7 @@ class App extends React.Component {
         {header}
         <div className="container">
           {main}
+          <SeatingChart/>
           {list}
         </div>
       </div>
