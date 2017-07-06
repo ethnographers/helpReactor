@@ -73,7 +73,6 @@ class App extends React.Component {
 
   toggleSeatingChart(evt) {
     evt.preventDefault();
-    console.log('calling viewSeatingChart. Toggling: ', this.state.isChartOn);
     this.setState(previousState => { return {isChartOn: !previousState.isChartOn}; });
   }
 
@@ -218,6 +217,7 @@ class App extends React.Component {
         <div className="container">
           {seating}
           {main}
+          <SeatingChart/>
           {list}
         </div>
       </div>
