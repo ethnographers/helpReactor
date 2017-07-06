@@ -26,8 +26,7 @@ const TicketSubmission = ({submitTickets, ticketCategoryList, location, toggleSe
             data-target="#myModal">
             Use Seaching Chart
             </button>
-        </div>
-      
+        </div>        
     </div>
     <div className="row">
       <div className="col-xs-10">

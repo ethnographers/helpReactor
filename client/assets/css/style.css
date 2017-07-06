@@ -247,6 +247,7 @@ h6:last-child {
   border: 1px solid;
   width: 80px;
   height: 30px;
+<<<<<<< HEAD
   text-align: center;
   background-color: lightblue;
   opacity: 0.7;
@@ -256,6 +257,12 @@ h6:last-child {
 .station:hover {
   background-color: lightblue;
   opacity: 1;
+=======
+}
+
+.station:hover {
+  background-color: blue;
+>>>>>>> b963d2bd8e3deaec4d3a9fad6d743632112f4cdb
 }
 
 .station:active {
@@ -296,6 +303,7 @@ span {
   position: relative;
   top: 19%;
 }
+
 
 /*.selected-station {
   background-color: blue;

@@ -70,6 +70,15 @@ class App extends React.Component {
 
     this.getTickets(option);
   }
+  viewSeatingChart(evt) {
+    evt.preventDefault();
+    console.log('calling viewSeatingChart. Toggling: ', this.state.isChartOn);
+    this.setState(previousState => { return {isChartOn: !previousState.isChartOn}; });
+  }
+  clickSeating(event) {
+    this.setState({location: event.target.getAttribute('data-location')});
+    this.viewSeatingChart(event);
+  }
 
   clickSeating(event) {
     this.setState({location: event.target.getAttribute('data-location')});
@@ -213,12 +222,14 @@ class App extends React.Component {
     
     return (
       <div>
+        <div onClick={this.clickSeating.bind(this)} data-location="hr77">Testing Div</div>
         <Alert />
         {nav}
         {header}
         <div className="container">
         <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
           {main}
+          <SeatingChart/>
           {list}
         </div>
       </div>
