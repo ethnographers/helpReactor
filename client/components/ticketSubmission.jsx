@@ -16,17 +16,18 @@ const TicketSubmission = ({submitTickets, ticketCategoryList, location, toggleSe
       <div className="col-xs-4">
         <label htmlFor="ticket_submission_location">Location</label>
         <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={location}/>
-        <div className="col-xs-2">
-          <button
-            onClick={toggleSeatingChart}
-            style={{position: 'absolute' , top: -35 , left: 300 , zIndex: 1000}}
-            type="submit"
-            id="ticket_submission_button"
-            className="btn btn-primary"
-          >
-            Use Seating Chart</button>
         </div>
-      </div>
+        <div className="col-xs-4">
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{position: 'absolute' , top: 24 , left: 0 , zIndex: 1000}}
+            data-toggle="modal"
+            data-target="#myModal">
+            Use Seaching Chart
+            </button>
+        </div>
+      
     </div>
     <div className="row">
       <div className="col-xs-10">
