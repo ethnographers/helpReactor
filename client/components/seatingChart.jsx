@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 const SeatingChart = ({clickSeating}) => (
   <div>
-
     <div className="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div className="modal-dialog" role="document">
         <div className="modal-content">
