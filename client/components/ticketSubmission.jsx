@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const TicketSubmission = ({submitTickets, ticketCategoryList, location, toggleSeatingChart}) => (
+const TicketSubmission = ({submitTickets, ticketCategoryList, location, handleLocationChange}) => (
   <form className="ticket_submission_form">
     <div className="form-group row">
       <div className="col-xs-12"><h3>Create a ticket</h3></div>
@@ -15,18 +15,18 @@ const TicketSubmission = ({submitTickets, ticketCategoryList, location, toggleSe
       </div>
       <div className="col-xs-4">
         <label htmlFor="ticket_submission_location">Location</label>
-        <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={location}/>
-        <div className="col-xs-2">
-          <button
-            onClick={toggleSeatingChart}
-            style={{position: 'absolute' , top: -35 , left: 300 , zIndex: 1000}}
-            type="submit"
-            id="ticket_submission_button"
-            className="btn btn-primary"
-          >
-            Use Seating Chart</button>
+        <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={location} onChange={handleLocationChange}/>
         </div>
-      </div>
+        <div className="col-xs-4">
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{position: 'absolute' , top: 24 , left: 0 , zIndex: 1000}}
+            data-toggle="modal"
+            data-target="#myModal">
+            Use Seaching Chart
+            </button>
+        </div>        
     </div>
     <div className="row">
       <div className="col-xs-10">
