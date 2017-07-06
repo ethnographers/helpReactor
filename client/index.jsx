@@ -32,7 +32,6 @@ class App extends React.Component {
       type: 'GET',
       async: false,
       success: (response) => {
-        console.log('this is response', response);
         if (response.user) {
           this.setState({
             user: response.user,
@@ -74,7 +73,6 @@ class App extends React.Component {
 
   toggleSeatingChart(evt) {
     evt.preventDefault();
-    console.log('calling viewSeatingChart. Toggling: ', this.state.isChartOn);
     this.setState(previousState => { return {isChartOn: !previousState.isChartOn}; });
   }
 
