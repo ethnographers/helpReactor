@@ -32,6 +32,7 @@ class App extends React.Component {
       type: 'GET',
       async: false,
       success: (response) => {
+        console.log('this is response', response);
         if (response.user) {
           this.setState({
             user: response.user,

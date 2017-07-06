@@ -28,23 +28,37 @@ h6:last-child {
   margin-bottom: 0;
 }
 
-.navbar-inverse {
-  background-color: #2b3d51;
+.navbar-student {
+  background-color: #860053;
+  border: 0;
+  border-radius: 0;
+  color: #fff
+}
+
+.navbar-admin {
+  background-color: #00D4C4;
+  border: 0;
+  border-radius: 0;
+}
+
+.navbar-mentor {
+  background-color: #007488;
   border: 0;
   border-radius: 0;
 }
 
 .navbar-inverse .navbar-brand {
-  color: #fff;
+  color: white;
 }
 
 .navbar-brand {
-  border: 1px solid #fff;
-  font-weight: 300;
+  border: 1px solid white;
+  font-weight: 700;
   height: auto;
   margin: 19px 0 !important;
   padding: 5px;
   text-transform: uppercase;
+  color: white !important;
 }
 
 .dropdown-menu {
