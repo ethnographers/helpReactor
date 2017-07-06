@@ -23,6 +23,7 @@ h6:last-child {
   margin-bottom: 0;
 }
 
+
 .navbar {
   margin-bottom: 0;
 }
@@ -226,3 +227,54 @@ h6:last-child {
   border-color: #a94442 !important;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 6px #ce8483 !important;
 }
+
+.row-3 {
+  display: flex;
+  margin: 3px;
+  justify-content: flex-start;
+}
+
+.mentor-section {
+  border: 1px solid;
+  width: 240px;
+  height: 30px;
+  text-align: center;
+  margin-left: 3px;
+
+}
+
+.station {
+  border: 1px solid;
+  width: 80px;
+  height: 30px;
+}
+
+.station:hover {
+  background-color: blue;
+}
+
+.station:active {
+  border: 4px solid white;
+}
+
+.row-2 {
+  display: flex;
+  margin: 3px;
+  justify-content: flex-start;
+  margin-left: 83px;
+}
+
+.row-two-station {
+  border: 1px solid;
+  width: 80px;
+  height: 30px;
+}
+
+.section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/*.selected-station {
+  background-color: blue;
+}*/
