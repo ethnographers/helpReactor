@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const TicketSubmission = ({submitTickets, ticketCategoryList, location, toggleSeatingChart}) => (
+const TicketSubmission = ({submitTickets, ticketCategoryList, location, handleLocationChange}) => (
   <form className="ticket_submission_form">
     <div className="form-group row">
       <div className="col-xs-12"><h3>Create a ticket</h3></div>
@@ -15,7 +15,7 @@ const TicketSubmission = ({submitTickets, ticketCategoryList, location, toggleSe
       </div>
       <div className="col-xs-4">
         <label htmlFor="ticket_submission_location">Location</label>
-        <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={location}/>
+        <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={location} onChange={handleLocationChange}/>
         </div>
         <div className="col-xs-4">
           <button
