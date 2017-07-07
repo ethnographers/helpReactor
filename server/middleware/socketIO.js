@@ -1,4 +1,4 @@
-const {db, Ticket, User} = require ('../../database/');
+const { db, Ticket, User } = require('../../database/');
 const util = require('../../helpers/util');
 
 module.exports = server => {
@@ -7,6 +7,7 @@ module.exports = server => {
   const students = {};
   const mentors = {};
   const admins = {};
+  const line_history = [];
 
   io.on('connection', socket => {
     let id = socket.handshake.query.id;
@@ -57,6 +58,20 @@ module.exports = server => {
         });
     });
 
+    // first send the history to the new client
+    for (var i in line_history) {
+      socket.emit('draw_line', { line: line_history[i] });
+    }
+
+    // add handler for message type "draw_line".
+    socket.on('draw_line', function(data) {
+      console.log('data from client', data)
+      // add received line to history 
+      line_history.push(data.line);
+      // send line to all clients
+      io.emit('draw_line', { line: data.line });
+    });
+
     // logic has flaws
     // socket.on('update adminStats', () => {
     //   Ticket.findAll({ where: { createdAt: { $gt: new Date(new Date() - 24 * 60 * 60 * 1000) } } })
@@ -80,5 +95,7 @@ module.exports = server => {
       console.log(`Disconnected, now ${Object.keys(mentors).length} mentors connected`);
       console.log(`Disconnected, now ${Object.keys(admins).length} admins connected`);
     });
+
   });
+
 };

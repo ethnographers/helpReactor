@@ -9,6 +9,8 @@ import Nav from './components/nav.jsx';
 import Header from './components/header.jsx';
 import AdminDashboard from './components/adminDashboard.jsx';
 import SeatingChart from './components/seatingChart.jsx';
+import WhiteBoard from './components/whiteboard.jsx';
+const socketConnection = io();
 
 class App extends React.Component {
   constructor() {
@@ -213,6 +215,7 @@ class App extends React.Component {
         <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
           {main}
           <SeatingChart/>
+          <WhiteBoard socket={socketConnection}/>
           {list}
         </div>
       </div>
