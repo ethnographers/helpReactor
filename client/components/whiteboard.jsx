@@ -1,114 +1,100 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import io from 'socket.io-client';
 
 class WhiteBoard extends React.Component {
 
-	constructor() {
-    super();
+	constructor(props) {
+    super(props);
 
     this.state = {
     	mouseClick: false,
     	mouseMove: false,
     	mousePos: {x:0, y:0},
-    	mousePosPrev: {x:0, y:0}
+    	mousePosPrev: false
     }
-  }
-
-	componentDidMount() {
-		console.log(this.state)
-    this.updateCanvas();
-    const canvas = this.refs.canvas;
   }
 
   handleMouseDown(e) {
     this.setState({mouseClick:true});
-    this.setState({mousePosPrev: {x:e.clientX, y:e.clientY}});
-    console.log('mouse is down', this.state.mouseClick)
   }
+
+  handleMouseMove(e) {
+    this.setState({mousePos: {x:e.pageX, y:e.pageY}});
+    this.setState({mouseMove:true});
+  };
 
   handleMouseUp(e) {
   	this.setState({mouseClick:false});
-  	this.setState({mousePosPrev: {x:e.clientX, y:e.clientY}});
-  	console.log('mouse is up', this.state.mouseClick)
-  };
-
-  handleMouseMove(e) {
-      // normalize mouse position to range 0.0 - 1.0
-    this.setState({mousePos: {x:e.clientX, y:e.clientY}});
-    console.log('mousemove', this.state.mousePos)
-    // console.log('mousemoveY', this.state.mouse.pos.y)
-  };
-
-  updateCanvas() {
-    const context = this.refs.canvas.getContext('2d');
-      // context.fillRect(0,0, 100, 100);
-    context.beginPath();
-    context.moveTo(this.state.mousePosPrev.x, this.state.mousePosPrev.y);
-    context.lineTo(this.state.mousePos.x, this.state.mousePos.y);
-    context.stroke();
-    console.log('calling from component did mount', this.state)
   }
+
+  mainLoop() {
+      // check if the user is drawing
+      if (this.state.mouseClick && this.state.mouseMove && this.state.mousePosPrev) {
+         // send line to to the server
+         this.props.socket.emit('draw_line', { line: [ this.state.mousePos, this.state.mousePosPrev ] });
+         this.setState({mouseMove: true});
+      }
+
+      this.setState({mousePosPrev: {x: this.state.mousePos.x, y: this.state.mousePos.y}});
+      setTimeout(this.mainLoop.bind(this), 10);
+  }
+
+  // draw(){
+  	//  const context = this.refs.canvas.getContext('2d')
+   // 	 var width   = window.innerWidth;
+   //   var height  = window.innerHeight;
+   //   context.beginPath();
+   //    // context.moveTo(line[0].x * width, line[0].y * height);
+   //    // context.lineTo(line[1].x * width, line[1].y * height);
+   //   context.moveTo(40, 30);
+   //   context.lineTo(45, 42);
+   //   context.stroke();
+   // };
+  
+
+	componentDidMount() {
+		// this.draw()
+
+	 const canvas = this.refs.canvas
+	 const context = this.refs.canvas.getContext('2d')
+   var width   = window.innerWidth;
+   var height  = window.innerHeight;
+
+
+	 this.props.socket.on('draw_line', function (data) {
+	 		context.strokeStyle = "#df4b26";
+  context.lineJoin = "round";
+  context.lineWidth = 5;
+      context.beginPath();
+      // context.moveTo(data.line[0].x * width, data.line[0].y * height);
+      // context.lineTo(data.line[1].x * width, data.line[1].y * height);
+      context.moveTo(data.line[0].x - canvas.offsetLeft, data.line[0].y - canvas.offsetTop);
+      context.lineTo(data.line[1].x - canvas.offsetLeft, data.line[1].y - canvas.offsetTop);
+
+      // context.moveTo(data.line[0].x, data.line[0].y);
+      // context.lineTo(data.line[1].x, data.line[1].y);
+
+      context.stroke();
+   });
+
+	 this.mainLoop();
+
+	}
+
+
+
+ 
 
   render() {
     return (
-      <canvas onMouseMove={this.handleMouseMove.bind(this)} onMouseUp={this.handleMouseUp.bind(this)} onMouseDown={this.handleMouseDown.bind(this)} ref="canvas" width={300} height={300}/>
+      <canvas 
+      	onMouseMove={this.handleMouseMove.bind(this)}
+      	onMouseUp={this.handleMouseUp.bind(this)}
+      	onMouseDown={this.handleMouseDown.bind(this)} ref="canvas" width={window.innerWidth} height={window.innerHeight}/>
     );
   }
 
-
-
-  //  // get canvas element and create context
-  //  var canvas  = document.getElementsByClassName('drawing');
-  //  var context = canvas.getContext('2d');
-  //  var width   = window.innerWidth;
-  //  var height  = window.innerHeight;
-
-
-  //     // set canvas to full browser width/height
-  //  canvas.width = width;
-  //  canvas.height = height;
-
-  //  // register mouse event handlers
-  //  canvas.onmousedown = function(e){ 
-  //  	console.log('mousedown', e);
-  //  	mouse.click = true;
-  //  };
-
-  //  canvas.onmouseup = function(e){
-  //  	console.log('mouseup', e); 
-  //  	mouse.click = false;
-  //  };
-
-  //  canvas.onmousemove = function(e) {
-  //     // normalize mouse position to range 0.0 - 1.0
-  //     mouse.pos.x = e.clientX / width;
-  //     mouse.pos.y = e.clientY / height;
-  //     mouse.move = true;
-  //     console.log(width)
-  //  };
-
-  //     context.beginPath();
-  //     context.moveTo(0, 3);
-  //     context.lineTo(43, 554);
-  //     context.stroke();
-
-  // }
-
-
-
-
-
-
-
-
-
-  // render() {
-  //   return (
-  //     <div>
-  //      <canvas className="drawing"></canvas>
-  //     </div>
-  //   );
-  // }
 
 }
 
