@@ -269,7 +269,6 @@ module.exports.tickets = [
     "claimedAt": "2017-05-25 12:39:25",
     "closedAt": "2017-05-25 13:01:25",
     "updatedAt": "2017-05-25 13:01:25",
-    "status": "Closed",
     "private": false,
     "userId": 28
   },
@@ -313,6 +312,18 @@ module.exports.tickets = [
     "userId": 15
   },
   {
+    "category": "Angular",
+    "description": "I am having an issue with Angular. Can I please have some help figuring out the issue I am having with Angular.",
+    "location": "HR8-04",
+    "claimedBy": 6,
+    "createdAt": "2017-06-23 19:46:49",
+    "claimedAt": "2017-06-23 19:51:49",
+    "closedAt": "2017-06-23 20:05:49",
+    "updatedAt": "2017-06-23 20:05:49",
+    "status": "Closed",
+    "userId": 5,
+  },
+  {
     "category": "MongoDB",
     "description": "I am having an issue with MongoDB. Can I please have some help figuring out the issue I am having with MongoDB.",
     "location": "HR8-02",
@@ -323,7 +334,7 @@ module.exports.tickets = [
     "updatedAt": "2017-05-23 17:26:44",
     "status": "Closed",
     "private": false,
-    "userId": 20
+    "userId": 20,
   },
   {
     "category": "Angular",
@@ -360,7 +371,6 @@ module.exports.tickets = [
     "claimedAt": "2017-05-06 10:08:55",
     "closedAt": "2017-05-06 10:19:55",
     "updatedAt": "2017-05-06 10:19:55",
-    "status": "Closed",
     "private": false,
     "userId": 16
   },
@@ -373,7 +383,6 @@ module.exports.tickets = [
     "claimedAt": "2017-05-26 03:56:59",
     "closedAt": "2017-05-26 04:16:59",
     "updatedAt": "2017-05-26 04:16:59",
-    "status": "Closed",
     "private": false,
     "userId": 25
   },
@@ -402,6 +411,18 @@ module.exports.tickets = [
     "status": "Closed",
     "private": false,
     "userId": 11
+  },
+  {
+    "category": "MongoDB",
+    "description": "I am having an issue with MongoDB. Can I please have some help figuring out the issue I am having with MongoDB.",
+    "location": "HR8-07",
+    "claimedBy": 9,
+    "createdAt": "2017-05-20 21:21:16",
+    "claimedAt": "2017-05-20 21:29:16",
+    "closedAt": "2017-05-20 21:50:16",
+    "updatedAt": "2017-05-20 21:50:16",
+    "status": "Closed",
+    "userId": 5
   },
   {
     "category": "React",
@@ -477,7 +498,6 @@ module.exports.tickets = [
     "claimedAt": "2017-06-23 13:19:01",
     "closedAt": "2017-06-23 13:47:01",
     "updatedAt": "2017-06-23 13:47:01",
-    "status": "Closed",
     "private": false,
     "userId": 26
   },
@@ -620,7 +640,6 @@ module.exports.tickets = [
     "claimedAt": "2017-06-23 06:08:09",
     "closedAt": "2017-06-23 06:28:09",
     "updatedAt": "2017-06-23 06:28:09",
-    "status": "Closed",
     "private": false,
     "userId": 21
   },
@@ -646,7 +665,6 @@ module.exports.tickets = [
     "claimedAt": "2017-05-27 13:45:10",
     "closedAt": "2017-05-27 13:57:10",
     "updatedAt": "2017-05-27 13:57:10",
-    "status": "Closed",
     "private": false,
     "userId": 4
   },
@@ -672,7 +690,6 @@ module.exports.tickets = [
     "claimedAt": "2017-06-20 10:25:18",
     "closedAt": "2017-06-20 10:37:18",
     "updatedAt": "2017-06-20 10:37:18",
-    "status": "Closed",
     "private": false,
     "userId": 16
   },
@@ -702,6 +719,7 @@ module.exports.tickets = [
     "private": false,
     "userId": 26
   },
+ 
   {
     "category": "MongoDB",
     "description": "I am having an issue with MongoDB. Can I please have some help figuring out the issue I am having with MongoDB.",
@@ -871,6 +889,7 @@ module.exports.tickets = [
     "private": false,
     "userId": 19
   },
+  
   {
     "category": "MongoDB",
     "description": "I am having an issue with MongoDB. Can I please have some help figuring out the issue I am having with MongoDB.",
@@ -2848,3 +2867,8 @@ module.exports.tickets = [
     "userId": 26
   }
 ];
+
+module.exports.tickets.map(ticket => {
+  ticket.rating = null;
+  ticket.review = null;
+});

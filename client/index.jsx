@@ -9,6 +9,8 @@ import Nav from './components/nav.jsx';
 import Header from './components/header.jsx';
 import AdminDashboard from './components/adminDashboard.jsx';
 import SeatingChart from './components/seatingChart.jsx';
+import Feedback from './components/Feedback.jsx';
+
 
 class App extends React.Component {
   constructor() {
@@ -21,6 +23,10 @@ class App extends React.Component {
       onlineUsers: {},
       statistic: {},
       waitTime: 0,
+      location: '',
+      countStars: null,
+      review: null,
+      ticket: null
     };
   }
 
@@ -65,16 +71,55 @@ class App extends React.Component {
     this.socket.on('user connect', data => this.setState({ onlineUsers: data }));
 
     this.socket.on('user disconnect', data => this.setState({ onlineUsers: data }));
-
+    
     this.getTickets(option);
   }
+  
+  clickSeating(evt) {
+    this.setState({location: evt.target.getAttribute('data-location')});
+  }
+  handleRatingClick(evt) {
+    this.setState({
+      countStars: evt.target.getAttribute('data-location')
+    });
+  }
 
+  handleReview(evt) {
+    this.setState({
+      review: evt.target.value
+    });
+  }
 
+  handleLocationChange(evt) {
+    this.setState({location: evt.target.value});
+  }
 
   getTickets(option) {
     $.get('/api/tickets', option, (tickets) => {
       this.setState({ ticketList: tickets });
       this.hasClaimed(this.state.user.id);
+    });
+  }
+
+  getLatestClosedTicket(data) {
+
+    $.get('/api/tickets', (tickets) => {
+      let context = this;
+      let result = tickets.filter((ticket) => (ticket.status === 'Closed' && ticket.userId === context.state.user.id));
+
+      let getLatestClosedTicket = result[0];
+
+      $.ajax({
+        url: `/api/tickets/${getLatestClosedTicket.id}`,
+        type: 'PUT',
+        data: data,
+        success: (response) => {
+          console.log('PUT request was successful');
+        },
+        error: (err) => {
+          console.log('failed to update ticket');
+        }
+      });
     });
   }
 
@@ -184,19 +229,32 @@ class App extends React.Component {
     if (isAuthenticated) {
       nav = <Nav user={this.state.user} />;
       header = <Header statistic={this.state.statistic} onlineUsers={this.state.onlineUsers} user={this.state.user} waitTime={this.state.waitTime}/>;
-      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
+      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} 
+        updateTickets={this.updateTickets.bind(this)} 
+        hasClaimed={this.state.hasClaimed} 
+      />;
     }
 
     if (!isAuthenticated) {
       document.querySelector('BODY').style.backgroundColor = '#2b3d51';
       main = <Login />;
     } else if (isAuthenticated && user.role === 'student') {
-      main = <TicketSubmission submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} />;
+      main = <TicketSubmission 
+        handleLocationChange={this.handleLocationChange.bind(this)} 
+        submitTickets={this.submitTickets.bind(this)} 
+        ticketCategoryList={this.state.ticketCategoryList} 
+        location={this.state.location}
+        getLatestClosedTicket={this.getLatestClosedTicket.bind(this)} 
+        countStars={this.state.countStars} 
+        review={this.state.review} 
+        handleRatingClick={this.handleRatingClick.bind(this)}
+        handleReview={this.handleReview.bind(this)}
+      />;
     } else if (isAuthenticated && user.role === 'mentor') {
       // reserved for mentor view
     } else if (isAuthenticated && user.role === 'admin') {
       main = <AdminDashboard filterTickets={this.filterTickets.bind(this)} onlineUsers={this.state.onlineUsers} adminStats={this.state.statistic} ticketCategoryList={this.state.ticketCategoryList} />;
-    }
+    } 
     
     return (
       <div>
@@ -204,6 +262,8 @@ class App extends React.Component {
         {nav}
         {header}
         <div className="container">
+          <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
+          <Feedback countStars={this.state.countStars} review={this.state.review} handleRatingClick={this.handleRatingClick.bind(this)} handleReview={this.handleReview.bind(this)} getLatestClosedTicket={this.getLatestClosedTicket.bind(this)}/>
           {main}
           {list}
         </div>

@@ -20,8 +20,9 @@ const findTickets = (req, res) => {
   if (query.role === 'student') {
     openedOrder = 1;
     claimedOrder = 2;
+    closedOrder = 3;
     option = {
-      status: ['Opened', 'Claimed']
+      status: ['Opened', 'Claimed', 'Closed']
     };
   } else if (query.role === 'mentor') {
     option = {
@@ -55,6 +56,7 @@ const findTickets = (req, res) => {
 };
 
 const updateTickets = (req, res) => {
+  console.log('trying to update tickets: ', req.body);
   if (req.body.status === 'Claimed') {
     req.body.claimedAt = new Date();
   }

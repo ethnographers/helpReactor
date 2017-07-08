@@ -45,6 +45,7 @@
     "passport-github": "^1.1.0",
     "pg": "^6.4.0",
     "react": "^15.6.1",
+    "react-bootstrap-star-rating": "^3.5.5-alpha.0.3",
     "react-dom": "^15.6.1",
     "redis": "^2.7.1",
     "sequelize": "^4.2.0",

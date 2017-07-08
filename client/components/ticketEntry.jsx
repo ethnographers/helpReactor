@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+// import io from 'socket.io-client';
 
 class TicketEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { now: new Date() };
+    this.state = { 
+      now: new Date(),
+      countStars: null
+    };
   }
   componentDidMount() {
     this.timer = setInterval(() => this.setState({ now: new Date() }), 1000);
@@ -14,10 +18,16 @@ class TicketEntry extends React.Component {
   componentWillUnmount() {
     clearInterval(this.timer);
   }
-
+  handleRatingClick(event) {
+    this.setState({
+      countStars: event.target.getAttribute('data-name')
+    });
+  }
+  
   render() {
     let claimButton = null;
     let closeButton = null;
+    let ratingComponent = null;
     let claimed = null;
     let className = null;
     let time = null;
@@ -36,12 +46,21 @@ class TicketEntry extends React.Component {
       time = `closed ${moment(this.props.ticket.closedAt).from(this.state.now)}`;
     }
 
-    if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id && this.props.user.role !== 'student') {
+    if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id) {
       claimButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })} type="button" className="btn btn-xs btn-primary claim_btn">Claim</button>;
     }
 
     if (this.props.ticket.status !== 'Closed' && (this.props.ticket.claimedBy === this.props.user.id || this.props.ticket.userId === this.props.user.id || this.props.user.role === 'admin')) {
-      closeButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Closed' })} type="button" className="btn btn-xs btn-danger">Close</button>;
+      closeButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Closed', user: this.props.ticket.user })} type="button" className="btn btn-xs btn-danger">Close</button>;
+    }
+    if (this.props.ticket.status === 'Closed' && this.props.user.role === 'student' && this.props.ticket.userId === this.props.user.id) {
+      ratingComponent = <button
+        type="button"
+        className="btn btn-xs btn-primary claim_btn"
+        data-toggle="modal"
+        data-target="#myModalFeedback">
+        Rate Your Experience
+      </button>;
     }
 
     if (this.props.ticket.private && this.props.ticket.user.username !== this.props.user.username && this.props.user.role === 'student') {
@@ -52,7 +71,7 @@ class TicketEntry extends React.Component {
       description = null;
       showPrivateIcon = !showPrivateIcon;
     } else {
-      description = <div className="ticket_list_entry_description"> {this.props.ticket.description} </div>
+      description = <div className="ticket_list_entry_description"> {this.props.ticket.description} </div>;
     }
 
     return (
@@ -72,6 +91,7 @@ class TicketEntry extends React.Component {
           <span className="btn btn-xs btn-default">{this.props.ticket.category}</span>
           {claimButton}
           {closeButton}
+          {ratingComponent}
         </div>
         {description}
       </div>

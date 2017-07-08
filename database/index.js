@@ -16,6 +16,14 @@ const Ticket = db.define('ticket', {
     autoIncrement: true,
     allowNull: false
   },
+  rating: {
+    type: Sequelize.INTEGER,
+    defaultValue: null
+  },
+  review: {
+    type: Sequelize.STRING,
+    defaultValue: null
+  },
   description: Sequelize.STRING,
   private: { type: Sequelize.BOOLEAN, defaultValue: false },
   category: Sequelize.STRING,
