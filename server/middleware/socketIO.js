@@ -1,6 +1,15 @@
 const {db, Ticket, User} = require ('../../database/');
 const util = require('../../helpers/util');
 
+var updateUserOnlineStatus = (id, status) => {
+  User.update(
+    {online: status},
+    { where: { id: id } }
+  ).catch((err) => {
+    console.log('ERROR: unable to update user ', id, ' online status to : ', status); 
+  });
+};
+
 module.exports = server => {
   const io = require('socket.io')(server, { cookie: true });
 
@@ -12,6 +21,9 @@ module.exports = server => {
     let id = socket.handshake.query.id;
     let role = socket.handshake.query.role;
 
+    // Update user online status in db
+    updateUserOnlineStatus(id, true);
+    
     if (role === 'student') {
       !students[id] ? students[id] = [socket] : students[id].push(socket);
     } else if (role === 'mentor') {
@@ -66,6 +78,10 @@ module.exports = server => {
     // });
 
     socket.on('disconnect', socket => {
+
+      // Update user online status in db
+      updateUserOnlineStatus(id, false);
+
       if (role === 'student') {
         students[id].length <= 1 ? delete students[id] : students[id].splice(students[id].indexOf(socket), 1);
       } else if (role === 'mentor') {
