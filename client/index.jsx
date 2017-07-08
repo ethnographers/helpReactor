@@ -125,6 +125,41 @@ class App extends React.Component {
     });
   }
 
+    skipLine(e) {
+    $('.ticket_submission_form').validate({
+      rules: {
+        category: 'required',
+        location: 'required',
+        description: 'required'
+      },
+      submitHandler: (form) => {
+        let ticket = {
+          userId: this.state.user.id,
+          category: document.getElementById('ticket_submission_category').value,
+          location: document.getElementById('ticket_submission_location').value,
+          description: document.getElementById('ticket_submission_description').value,
+          private: document.getElementById('is_private').checked,
+          status: 'Priority',
+        };
+        $.ajax({
+          url: '/api/tickets',
+          type: 'POST',
+          data: ticket,
+          success: (response) => {
+            this.socket.emit('refresh');
+            this.socket.emit('update adminStats');
+            document.getElementById('ticket_submission_location').value = '';
+            document.getElementById('ticket_submission_description').value = '';
+          },
+          error: () => {
+            console.log('Error submitting ticket');
+          }
+        });
+      },
+      errorPlacement: function(error, element) {} // Do not show error messages
+    });
+  }
+
   updateTickets(data) {
     if (data.status === 'Claimed') {
       data.claimedBy = this.state.user.id;
@@ -208,14 +243,14 @@ class App extends React.Component {
 
     } else if (isAuthenticated && user.role === 'student' && !this.state.acceptSession) {
 
-      main = <TicketSubmission handleLocationChange={this.handleLocationChange} submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} location={this.state.location} />;
+      main = <TicketSubmission skipLine={this.skipLine.bind(this)} handleLocationChange={this.handleLocationChange} submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} location={this.state.location} />;
       list = <TicketList socket={socketConnection} user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
 
     } else if (isAuthenticated && user.role === 'student' && this.state.acceptSession) {
       main = <InteractiveSession socket={socketConnection}/>
 
     } else if (isAuthenticated && user.role === 'mentor' && !this.state.acceptSession) {
-      list = <TicketList socket={socketConnection} user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
+      list = <TicketList socket={socketConnection} user={this.state.user} ticketList={this.state.ticketList.slice().reverse()} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
 
     } else if (isAuthenticated && user.role === 'mentor' && this.state.acceptSession) {
        main = <InteractiveSession socket={socketConnection}/>

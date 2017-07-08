@@ -62,6 +62,7 @@ class TicketSubmission extends React.Component {
           </div>
           <div className="col-xs-2">
             <button onClick={this.props.submitTickets} type="submit" id="ticket_submission_button" className="btn btn-primary">Submit Ticket</button>
+            <button onClick={this.props.skipLine} type="submit" id="ticket_submission_button" className="btn btn-primary">Skip the Line</button>
           </div>
         </div>
       </form>
