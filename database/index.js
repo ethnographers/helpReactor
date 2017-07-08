@@ -17,6 +17,7 @@ const Ticket = db.define('ticket', {
     allowNull: false
   },
   description: Sequelize.STRING,
+  private: { type: Sequelize.BOOLEAN, defaultValue: false },
   category: Sequelize.STRING,
   status: Sequelize.STRING,
   location: Sequelize.STRING,
@@ -36,7 +37,8 @@ const User = db.define('user', {
   lastName: Sequelize.STRING,
   username: { type: Sequelize.STRING, allowNull: false, unique: true },
   role: { type: Sequelize.ENUM('student', 'mentor', 'admin'), allowNull: false },
-  cohort: Sequelize.STRING
+  cohort: Sequelize.STRING,
+  online: { type: Sequelize.BOOLEAN, defaultValue: false }
 });
 
 User.hasMany(Ticket);

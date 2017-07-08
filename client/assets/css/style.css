@@ -311,7 +311,17 @@ span {
   top: 19%;
 }
 
+.dim {
+  background-color: white;
+  border: 1px Gainsboro solid;
+}
 
-/*.selected-station {
+.numberInPair {
+  font-size: 14px;
+  line-height: 19px
+}
+
+/*
+.selected-station {
   background-color: blue;
 }*/
