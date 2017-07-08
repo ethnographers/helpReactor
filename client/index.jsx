@@ -21,7 +21,6 @@ class App extends React.Component {
       onlineUsers: {},
       statistic: {},
       waitTime: 0,
-      location: ''
     };
   }
 
@@ -70,13 +69,7 @@ class App extends React.Component {
     this.getTickets(option);
   }
 
-  clickSeating(evt) {
-    this.setState({location: evt.target.getAttribute('data-location')});
-  }
 
-  handleLocationChange(evt) {
-    this.setState({location: evt.target.value});
-  }
 
   getTickets(option) {
     $.get('/api/tickets', option, (tickets) => {
@@ -98,6 +91,7 @@ class App extends React.Component {
           category: document.getElementById('ticket_submission_category').value,
           location: document.getElementById('ticket_submission_location').value,
           description: document.getElementById('ticket_submission_description').value,
+          private: document.getElementById('is_private').checked,
           status: 'Opened'
         };
         $.ajax({
@@ -197,7 +191,7 @@ class App extends React.Component {
       document.querySelector('BODY').style.backgroundColor = '#2b3d51';
       main = <Login />;
     } else if (isAuthenticated && user.role === 'student') {
-      main = <TicketSubmission handleLocationChange={this.handleLocationChange.bind(this)} submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} location={this.state.location} />;
+      main = <TicketSubmission submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} />;
     } else if (isAuthenticated && user.role === 'mentor') {
       // reserved for mentor view
     } else if (isAuthenticated && user.role === 'admin') {
@@ -210,9 +204,7 @@ class App extends React.Component {
         {nav}
         {header}
         <div className="container">
-        <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
           {main}
-          <SeatingChart/>
           {list}
         </div>
       </div>

@@ -17,6 +17,7 @@ const Ticket = db.define('ticket', {
     allowNull: false
   },
   description: Sequelize.STRING,
+  private: { type: Sequelize.BOOLEAN, defaultValue: false },
   category: Sequelize.STRING,
   status: Sequelize.STRING,
   location: Sequelize.STRING,
