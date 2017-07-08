@@ -15,13 +15,21 @@ class TicketEntry extends React.Component {
     clearInterval(this.timer);
   }
 
+  startVideo(){
+
+  }
+
+  claimTicket(){
+    this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })
+  }
+
   render() {
     let claimButton = null;
     let closeButton = null;
     let claimed = null;
     let className = null;
     let time = null;
-    let isOnline = null;
+    let isOnline = true;
     let isOnlineButton = null;
 
     if (this.props.ticket.status === 'Opened') {
@@ -37,9 +45,9 @@ class TicketEntry extends React.Component {
     }
 
     if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id && this.props.user.role !== 'student') {
-      claimButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })} type="button" className="btn btn-xs btn-primary claim_btn">Claim</button>;
+      claimButton = <button onClick={this.claimTicket.bind(this)} type="button" className="btn btn-xs btn-primary claim_btn">Claim</button>;
       if(isOnline) { 
-        isOnlineButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })} type="button" className="btn btn-xs btn-primary claim_btn">Online Now</button>; 
+        isOnlineButton = <button onClick={this.claimTicket.bind(this)} type="button" className="btn btn-xs btn-primary claim_btn">Online Now</button>; 
       }
     }
 
