@@ -63,6 +63,7 @@ class WhiteBoard extends React.Component {
 
 
 	 this.props.socket.on('draw_line', function (data) {
+    console.log('hi')
 	 		context.strokeStyle = "#df4b26";
   context.lineJoin = "round";
   context.lineWidth = 5;

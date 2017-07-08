@@ -9,7 +9,7 @@ import Nav from './components/nav.jsx';
 import Header from './components/header.jsx';
 import AdminDashboard from './components/adminDashboard.jsx';
 import SeatingChart from './components/seatingChart.jsx';
-import WhiteBoard from './components/whiteboard.jsx';
+import InteractiveSession from './components/interactiveSession.jsx';
 const socketConnection = io();
 
 class App extends React.Component {
@@ -23,7 +23,9 @@ class App extends React.Component {
       onlineUsers: {},
       statistic: {},
       waitTime: 0,
-      location: ''
+      location: '',
+      ticketClaimed: false,
+      acceptSession: null
     };
   }
 
@@ -68,6 +70,13 @@ class App extends React.Component {
     this.socket.on('user connect', data => this.setState({ onlineUsers: data }));
 
     this.socket.on('user disconnect', data => this.setState({ onlineUsers: data }));
+
+    this.socket.on('ticked claimed', data => {
+      this.setState({ ticketClaimed: true })
+      if ( confirm('Would you like to start an interactive session?') ) {
+      this.setState({acceptSession: true})}
+
+    });
 
     this.getTickets(option);
   }
@@ -181,6 +190,10 @@ class App extends React.Component {
     return $('.claim_btn').prop('disabled', false);
   }
 
+  testing(){
+    this.setState({acceptSession: true})
+  }
+
   render() {
     let user = this.state.user;
     let isAuthenticated = this.state.isAuthenticated;
@@ -192,19 +205,33 @@ class App extends React.Component {
     if (isAuthenticated) {
       nav = <Nav user={this.state.user} />;
       header = <Header statistic={this.state.statistic} onlineUsers={this.state.onlineUsers} user={this.state.user} waitTime={this.state.waitTime}/>;
-      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
     }
 
     if (!isAuthenticated) {
       document.querySelector('BODY').style.backgroundColor = '#2b3d51';
       main = <Login />;
-    } else if (isAuthenticated && user.role === 'student') {
+
+    } else if (isAuthenticated && user.role === 'student' && !this.state.acceptSession) {
+
       main = <TicketSubmission handleLocationChange={this.handleLocationChange.bind(this)} submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} location={this.state.location} />;
-    } else if (isAuthenticated && user.role === 'mentor') {
-      // reserved for mentor view
+      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
+
+    } else if (isAuthenticated && user.role === 'student' && this.state.acceptSession) {
+      main = <InteractiveSession socket={socketConnection}/>
+
+    } else if (isAuthenticated && user.role === 'mentor' && !this.state.acceptSession) {
+      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
+
+    } else if (isAuthenticated && user.role === 'mentor' && this.state.acceptSession) {
+       main = <InteractiveSession socket={socketConnection}/>
+
     } else if (isAuthenticated && user.role === 'admin') {
       main = <AdminDashboard filterTickets={this.filterTickets.bind(this)} onlineUsers={this.state.onlineUsers} adminStats={this.state.statistic} ticketCategoryList={this.state.ticketCategoryList} />;
-    }
+
+      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
+    } 
+
+
     
     return (
       <div>
@@ -212,10 +239,10 @@ class App extends React.Component {
         {nav}
         {header}
         <div className="container">
+        <button onClick={this.testing.bind(this)}/>
         <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
           {main}
           <SeatingChart/>
-          <WhiteBoard socket={socketConnection}/>
           {list}
         </div>
       </div>
