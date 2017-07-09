@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-// import io from 'socket.io-client';
 
 class TicketEntry extends React.Component {
   constructor(props) {
@@ -23,7 +22,21 @@ class TicketEntry extends React.Component {
       countStars: event.target.getAttribute('data-name')
     });
   }
-  
+
+  startSession(){
+    let options = {
+      to: this.props.ticket.user,
+      event: 'initiate session',
+      ticket: this.props.ticket
+    };
+    this.props.sendP2P(options);
+    // TBD: UNCOMMENT PRIOR TO RELEASE this.claimTicket();
+  }
+
+  claimTicket(){
+    this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })
+  }
+
   render() {
     let claimButton = null;
     let closeButton = null;
@@ -31,8 +44,11 @@ class TicketEntry extends React.Component {
     let claimed = null;
     let className = null;
     let time = null;
+    let isOnline = this.props.ticket.user.online;
+    let isOnlineButton = null;
     let description = null;
     let showPrivateIcon = false;
+
 
     if (this.props.ticket.status === 'Opened') {
       className = 'alert-success';
@@ -48,6 +64,9 @@ class TicketEntry extends React.Component {
 
     if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id) {
       claimButton = <button onClick={() => this.props.updateTickets({ id: this.props.ticket.id, status: 'Claimed' })} type="button" className="btn btn-xs btn-primary claim_btn">Claim</button>;
+      if(isOnline) { 
+        isOnlineButton = <button onClick={this.startSession.bind(this)} type="button" className="btn btn-xs btn-primary claim_btn">Online Now</button>; 
+      }
     }
 
     if (this.props.ticket.status !== 'Closed' && (this.props.ticket.claimedBy === this.props.user.id || this.props.ticket.userId === this.props.user.id || this.props.user.role === 'admin')) {
@@ -89,6 +108,7 @@ class TicketEntry extends React.Component {
         </div>
         <div className="ticket_list_entry_buttons">
           <span className="btn btn-xs btn-default">{this.props.ticket.category}</span>
+          {isOnlineButton}
           {claimButton}
           {closeButton}
           {ratingComponent}

@@ -1,4 +1,4 @@
-const {db, Ticket, User} = require ('../../database/');
+const { db, Ticket, User } = require('../../database/');
 const util = require('../../helpers/util');
 
 var updateUserOnlineStatus = (id, status) => {
@@ -16,12 +16,12 @@ module.exports = server => {
   const students = {};
   const mentors = {};
   const admins = {};
+  const line_history = [];
 
   io.on('connection', socket => {
     let id = socket.handshake.query.id;
     let role = socket.handshake.query.role;
 
-    // Update user online status in db
     updateUserOnlineStatus(id, true);
     
     if (role === 'student') {
@@ -69,6 +69,15 @@ module.exports = server => {
         });
     });
 
+    socket.on('p2p', (options) => {
+      console.log(
+        `server got p2p:${options.event} from:${options.from} to:${options.to} for ${options.event}`
+      );
+      const sockets = (options.to.role == 'student') ?
+            students[options.to.id] : mentors[options.to.id];
+      sockets.forEach(socket => socket.emit(options.event, options));
+    });
+
     // logic has flaws
     // socket.on('update adminStats', () => {
     //   Ticket.findAll({ where: { createdAt: { $gt: new Date(new Date() - 24 * 60 * 60 * 1000) } } })
@@ -79,7 +88,6 @@ module.exports = server => {
 
     socket.on('disconnect', socket => {
 
-      // Update user online status in db
       updateUserOnlineStatus(id, false);
 
       if (role === 'student') {
@@ -96,5 +104,7 @@ module.exports = server => {
       console.log(`Disconnected, now ${Object.keys(mentors).length} mentors connected`);
       console.log(`Disconnected, now ${Object.keys(admins).length} admins connected`);
     });
+
   });
+
 };

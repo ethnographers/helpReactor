@@ -1,6 +1,6 @@
 module.exports.users = [
   {
-    "firstName":"El",
+    "firstName":"Azmeer",
     "lastName":"Azmeer",
     "username":"azmeer",
     "role":"admin",
@@ -14,15 +14,15 @@ module.exports.users = [
     "cohort": "HRSF-78"
   },
   {
-    "firstName": "The",
+    "firstName": "Bonkula",
     "lastName": "Bonkula",
     "username": "bonkula",
     "role": "mentor",
     "cohort": "HRSF-78"
   },
   {
-    "firstName": "Random",
-    "lastName": "User",
+    "firstName": "Poet",
+    "lastName": "IsAwesome",
     "username": "poetisawesome",
     "role": "student",
     "cohort": null
@@ -63,9 +63,9 @@ module.exports.users = [
     "cohort": "HRSF-78"
   },
   {
-    "firstName": "Nessi",
-    "lastName": "Milson",
-    "username": "nessi_milson",
+    "firstName": "Bonk",
+    "lastName": "El",
+    "username": "elbonk",
     "role": "student",
     "cohort": "HRSF-78"
   },

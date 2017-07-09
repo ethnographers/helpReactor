@@ -32,10 +32,6 @@ const findTickets = (req, res) => {
     option = _.omit(query, ['id', 'role']);
   }
 
-  const otherfunction = function(status) {
-    return status;
-  };
-
   Ticket.findAll({
     where: option,
     include: [ { model: User, as: 'user' }, { model: User, as: 'userClaimed' } ],
