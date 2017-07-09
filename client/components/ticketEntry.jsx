@@ -30,7 +30,6 @@ class TicketEntry extends React.Component {
       ticket: this.props.ticket
     };
     this.props.sendP2P(options);
-    // TBD: UNCOMMENT PRIOR TO RELEASE this.claimTicket();
   }
 
   claimTicket(){

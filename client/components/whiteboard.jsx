@@ -7,10 +7,11 @@ class WhiteBoard extends React.Component {
     super(props);
 
     this.state = {
-    	mouseClick: false,
-    	mouseMove: false,
-    	mousePos: {x:0, y:0},
-    	mousePosPrev: false
+      isEnabled: false,
+      mouseClick: false,
+      mouseMove: false,
+      mousePos: {x:0, y:0},
+      mousePosPrev: false
     }
   }
 
@@ -24,22 +25,24 @@ class WhiteBoard extends React.Component {
   };
 
   handleMouseUp(e) {
-  	this.setState({mouseClick:false});
+    this.setState({mouseClick:false});
   }
 
   mainLoop() {
-    if (this.state.mouseClick && this.state.mouseMove && this.state.mousePosPrev) {
-      let line = [ this.state.mousePos, this.state.mousePosPrev ];
-      const options = {
-        event: 'draw_line',
-        line: line
-      };
-      this.draw('local', line);
-      this.props.sendP2P(options);
-      this.setState({mouseMove: true});
+    if (this.state.isEnabled) {
+      if (this.state.mouseClick && this.state.mouseMove && this.state.mousePosPrev) {
+        let line = [ this.state.mousePos, this.state.mousePosPrev ];
+        const options = {
+          event: 'draw_line',
+          line: line
+        };
+        this.draw('local', line);
+        this.props.sendP2P(options);
+        this.setState({mouseMove: true});
+      }
+      this.setState({mousePosPrev: {x: this.state.mousePos.x, y: this.state.mousePos.y}});
+      setTimeout(this.mainLoop.bind(this), 10);
     }
-    this.setState({mousePosPrev: {x: this.state.mousePos.x, y: this.state.mousePos.y}});
-    setTimeout(this.mainLoop.bind(this), 10);
   }
 
   draw(client, line) {
@@ -57,9 +60,13 @@ class WhiteBoard extends React.Component {
   }
   
   componentDidMount() {
-
     this.props.socket.on('draw_line', data => this.draw('remote', data.line));
+    this.state.isEnabled = true;
     this.mainLoop();
+  }
+
+  componentWillUnmount() {
+    this.state.isEnabled = false;
   }
 
   render() {

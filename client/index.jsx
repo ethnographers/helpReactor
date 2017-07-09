@@ -28,6 +28,7 @@ class App extends React.Component {
       review: null,
       ticket: null,
       ticketClaimed: false,
+      sessionPartner: { firstName: 'anonymous' },
       sessionIsActive: null,
     };
   }
@@ -77,6 +78,9 @@ class App extends React.Component {
     this.socket.on('initiate session', options => this.setUpClientSession(options));
 
     this.socket.on('invitation response', options => this.handleSessionResponse(options));
+
+    this.socket.on('sign off session', options => this.partnerSignedOff(options));
+    
     this.getTickets(option);
   }
   
@@ -231,11 +235,33 @@ class App extends React.Component {
       sessionPartner: options.from
     });
   }
+
+  deactivateSession() {
+    this.setState({
+      sessionIsActive: false,
+      sessionPartner: { firstName: 'anonymous' }
+    });
+  }
+
+  partnerSignedOff(options) {
+    alert(`${options.from.firstName} signed off`);
+    this.deactivateSession();
+  }
+  
+  signOff() {
+    const signOffMessage = {
+      to: this.state.sessionPartner,
+      event: 'sign off session'
+    }
+    this.sendP2P(signOffMessage);
+    this.deactivateSession();
+  }
   
   setUpClientSession(options) {
     const response = {
       to: options.from,
       event: 'invitation response',
+      ticket: options.ticket,
       isAccepted: false
     };
 
@@ -249,6 +275,7 @@ class App extends React.Component {
   handleSessionResponse(options) {
     if (options.isAccepted) {
       this.activateSession(options);
+      this.updateTickets({ id: options.ticket.id, status: 'Claimed' });
     } else {
       alert('Session invitation declined');
     }
@@ -262,37 +289,73 @@ class App extends React.Component {
     let main = null;
     let list = null;
 
+    let login = <Login />;
+    
+    let feedback = <Feedback
+      countStars={this.state.countStars}
+      review={this.state.review}
+      handleRatingClick={this.handleRatingClick.bind(this)}
+      handleReview={this.handleReview.bind(this)}
+      getLatestClosedTicket={this.getLatestClosedTicket.bind(this)}
+    />;
+
+    let ticketSubmission = <TicketSubmission
+      submitTickets={this.submitTickets.bind(this)}
+      ticketCategoryList={this.state.ticketCategoryList}
+      location={this.state.location}
+      getLatestClosedTicket={this.getLatestClosedTicket.bind(this)}
+      countStars={this.state.countStars}
+      review={this.state.review}
+      handleRatingClick={this.handleRatingClick.bind(this)}
+      handleReview={this.handleReview.bind(this)}
+    />;
+
+    let ticketList = <TicketList
+      sendP2P={this.sendP2P.bind(this)}
+      user={this.state.user}
+      ticketList={this.state.ticketList}
+      updateTickets={this.updateTickets.bind(this)}
+      hasClaimed={this.state.hasClaimed}
+    />;
+
+    let adminDashboard = <AdminDashboard
+      filterTickets={this.filterTickets.bind(this)}
+      onlineUsers={this.state.onlineUsers}
+      adminStats={this.state.statistic}
+      ticketCategoryList={this.state.ticketCategoryList}
+    />;
+
+    let interactiveSession = <InteractiveSession
+      user={this.state.user}
+      partner={this.state.sessionPartner}
+      socket={this.socket}
+      signOff={this.signOff.bind(this)}
+      sendP2P={this.sendP2P.bind(this)}
+    />;
+    
     if (isAuthenticated) {
       nav = <Nav user={this.state.user} />;
       header = <Header statistic={this.state.statistic} onlineUsers={this.state.onlineUsers} user={this.state.user} waitTime={this.state.waitTime}/>;
-      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} 
-        updateTickets={this.updateTickets.bind(this)} 
-        hasClaimed={this.state.hasClaimed} 
-      />;
+      list = ticketList;
     }
 
     if (!isAuthenticated) {
       document.querySelector('BODY').style.backgroundColor = '#2b3d51';
-      main = <Login />;
+      main = login;
     } else if (isAuthenticated && user.role === 'student' && !this.state.sessionIsActive) {
-      main = <TicketSubmission submitTickets={this.submitTickets.bind(this)} ticketCategoryList={this.state.ticketCategoryList} location={this.state.location} getLatestClosedTicket={this.getLatestClosedTicket.bind(this)} countStars={this.state.countStars} review={this.state.review} handleRatingClick={this.handleRatingClick.bind(this)} handleReview={this.handleReview.bind(this)} />;
-      list = <TicketList sendP2P={this.sendP2P.bind(this)} user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} />;
-
+      main = ticketSubmission;
+      list = ticketList;
     } else if (isAuthenticated && user.role === 'student' && this.state.sessionIsActive) {
-      main = <InteractiveSession socket={this.socket} sendP2P={this.sendP2P.bind(this)} />
-
+      main = interactiveSession;
+      list = null;
     } else if (isAuthenticated && user.role === 'mentor' && !this.state.sessionIsActive) {
-      list = <TicketList sendP2P={this.sendP2P.bind(this)} user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} sendP2P={this.sendP2P.bind(this)} />;
-
+      list = ticketList;
     } else if (isAuthenticated && user.role === 'mentor' && this.state.sessionIsActive) {
-       main = <InteractiveSession socket={this.socket}sendP2P={this.sendP2P.bind(this)}/>
-
+       main = interactiveSession;
     } else if (isAuthenticated && user.role === 'admin') {
-      main = <AdminDashboard filterTickets={this.filterTickets.bind(this)} onlineUsers={this.state.onlineUsers} adminStats={this.state.statistic} ticketCategoryList={this.state.ticketCategoryList} />;
-
-      list = <TicketList user={this.state.user} ticketList={this.state.ticketList} updateTickets={this.updateTickets.bind(this)} hasClaimed={this.state.hasClaimed} sendP2P={this.sendP2P.bind(this)}  />;
+      main = adminDashboard;
+      list = ticketList;
     } 
-
 
     return (
       <div>
@@ -300,7 +363,7 @@ class App extends React.Component {
         {nav}
         {header}
         <div className="container">
-          <Feedback countStars={this.state.countStars} review={this.state.review} handleRatingClick={this.handleRatingClick.bind(this)} handleReview={this.handleReview.bind(this)} getLatestClosedTicket={this.getLatestClosedTicket.bind(this)}/>
+          {feedback}
           {main}
           {list}
         </div>
