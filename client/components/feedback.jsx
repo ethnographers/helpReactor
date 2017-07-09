@@ -1,5 +1,5 @@
 import React from 'react';
-import StarRating from './StarRating.jsx';
+import StarRating from './starRating.jsx';
 import Review from './review.jsx';
 
 const Feedback = ({countStars, review, handleRatingClick, handleReview, getLatestClosedTicket}) => ( 
