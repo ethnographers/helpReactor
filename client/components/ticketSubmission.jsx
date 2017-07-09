@@ -21,7 +21,7 @@ class TicketSubmission extends React.Component {
           <button
             type="button"
             className="btn btn-primary"
-            style={{position: 'absolute' , top: 24 , left: 725, zIndex: 1200}}
+            style={{position: 'absolute' , top: 77 , left: 717, zIndex: 1200}}
             data-toggle="modal"
             data-target="#myModalFeedback"
           >
