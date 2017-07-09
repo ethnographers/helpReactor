@@ -20,9 +20,8 @@ const findTickets = (req, res) => {
   if (query.role === 'student') {
     openedOrder = 1;
     claimedOrder = 2;
-    closedOrder = 3;
     option = {
-      status: ['Opened', 'Claimed', 'Closed']
+      status: ['Opened', 'Claimed']
     };
   } else if (query.role === 'mentor') {
     option = {
