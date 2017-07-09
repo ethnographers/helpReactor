@@ -9,7 +9,7 @@ import Nav from './components/nav.jsx';
 import Header from './components/header.jsx';
 import AdminDashboard from './components/adminDashboard.jsx';
 import SeatingChart from './components/seatingChart.jsx';
-import Feedback from './components/Feedback.jsx';
+import Feedback from './components/feedback.jsx';
 
 
 class App extends React.Component {
