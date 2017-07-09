@@ -9,6 +9,7 @@ class TicketSubmission extends React.Component {
     this.state = {
       location: '',
     };
+
     this.clickSeating = (evt) => { this.setState({location: evt.target.getAttribute('data-location')}); };
     this.handleLocationChange = (evt) => { this.setState({location: evt.target.value}); };
   }
@@ -46,7 +47,9 @@ class TicketSubmission extends React.Component {
             <div className="input-group">
               <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={this.state.location} onChange={this.handleLocationChange}/>
               <span className="input-group-btn">
-                <SeatingChart clickSeating={this.clickSeating}/>
+
+                <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
+
 
                 <button
                   type="button"
