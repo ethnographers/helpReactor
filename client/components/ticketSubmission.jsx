@@ -61,8 +61,8 @@ class TicketSubmission extends React.Component {
             <textarea id="ticket_submission_description" className="form-control" name="description" placeholder="Ticket description"></textarea>
           </div>
           <div className="col-xs-2">
-            <button onClick={this.props.submitTickets} type="submit" id="ticket_submission_button" className="btn btn-primary">Submit Ticket</button>
-            <button onClick={this.props.skipLine} type="submit" id="ticket_submission_button" className="btn btn-primary">Skip the Line</button>
+            <button onClick={(event) => {event.preventDefault(); this.props.submitTickets();}} type="submit" id="ticket_submission_button" className="btn btn-primary">Submit Ticket</button>
+            <button onClick={(event) => {event.preventDefault(); this.props.skipLine();}} type="submit" id="ticket_submission_button" className="btn btn-primary">Skip the Line</button>
           </div>
         </div>
       </form>

@@ -42,12 +42,16 @@ class TicketEntry extends React.Component {
       claimed = <div className="ticket_list_entry_claimed">by {this.props.ticket.userClaimed.firstName} {this.props.ticket.userClaimed.lastName}</div>;
       className = 'alert-info';
       time = `claimed ${moment(this.props.ticket.claimedAt).from(this.state.now)}`;
-    } else {
+    } else if (this.props.ticket.status === 'Priority') {
+      className = 'priority';
+      time = `🌟 PRIORITY 🌟 ${moment(this.props.ticket.createdAt).from(this.state.now)}`;
+    }
+    else {
       className = 'alert-danger';
       time = `closed ${moment(this.props.ticket.closedAt).from(this.state.now)}`;
     }
 
-    if (this.props.ticket.status === 'Opened' && this.props.ticket.userId !== this.props.user.id && this.props.user.role !== 'student') {
+    if ((this.props.ticket.status === 'Opened' || 'Priority') && this.props.ticket.userId !== this.props.user.id && this.props.user.role !== 'student') {
       claimButton = <button onClick={this.claimTicket.bind(this)} type="button" className="btn btn-xs btn-primary claim_btn">Claim</button>;
       if(isOnline) { 
         isOnlineButton = <button onClick={this.startSession.bind(this)} type="button" className="btn btn-xs btn-primary claim_btn">Online Now</button>; 

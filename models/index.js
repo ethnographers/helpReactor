@@ -4,6 +4,7 @@ const util = require('../helpers/util');
 
 
 const createTicket = (req, res) => {
+  console.log('CREATING TICKETS', req.body)
   Ticket.create(req.body).then(result => {
     if (!result) { res.sendStatus(500); }
     res.sendStatus(201);
@@ -14,18 +15,20 @@ const findTickets = (req, res) => {
   let option = {};
   let query = req.query;
   let claimedOrder = 1;
+  let priorityOrder = 3;
   let openedOrder = 2;
-  let closedOrder = 3;
+  let closedOrder = 4;
   
   if (query.role === 'student') {
-    openedOrder = 1;
-    claimedOrder = 2;
+    priorityOrder = 1
+    openedOrder = 2;
+    claimedOrder = 3;
     option = {
-      status: ['Opened', 'Claimed']
+      status: ['Priority', 'Opened', 'Claimed']
     };
   } else if (query.role === 'mentor') {
     option = {
-      status: ['Opened', 'Claimed'],
+      status: ['Claimed', 'Opened', 'Priority'],
       $or: [{ claimedBy: query.id }, { claimedBy: null }]
     };
   } else if (query.role === 'admin') {
@@ -42,6 +45,7 @@ const findTickets = (req, res) => {
     order: [
       [db.literal(`CASE
         WHEN status = 'Claimed' THEN ${claimedOrder}
+        WHEN status = 'Priority' THEN ${priorityOrder}
         WHEN status = 'Opened' THEN ${openedOrder}
         WHEN status = 'Closed' THEN ${closedOrder}
         END`
