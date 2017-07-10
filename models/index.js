@@ -35,10 +35,6 @@ const findTickets = (req, res) => {
     option = _.omit(query, ['id', 'role']);
   }
 
-  const otherfunction = function(status) {
-    return status;
-  };
-
   Ticket.findAll({
     where: option,
     include: [ { model: User, as: 'user' }, { model: User, as: 'userClaimed' } ],
@@ -59,6 +55,7 @@ const findTickets = (req, res) => {
 };
 
 const updateTickets = (req, res) => {
+  console.log('trying to update tickets: ', req.body);
   if (req.body.status === 'Claimed') {
     req.body.claimedAt = new Date();
   }

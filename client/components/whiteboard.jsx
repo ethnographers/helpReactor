@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import io from 'socket.io-client';
 
 class WhiteBoard extends React.Component {
 
-	constructor(props) {
+  constructor(props) {
     super(props);
 
     this.state = {
-    	mouseClick: false,
-    	mouseMove: false,
-    	mousePos: {x:0, y:0},
-    	mousePosPrev: false
+      isEnabled: false,
+      mouseClick: false,
+      mouseMove: false,
+      mousePos: {x:0, y:0},
+      mousePosPrev: false
     }
   }
 
@@ -25,67 +25,49 @@ class WhiteBoard extends React.Component {
   };
 
   handleMouseUp(e) {
-  	this.setState({mouseClick:false});
+    this.setState({mouseClick:false});
   }
 
   mainLoop() {
-      // check if the user is drawing
+    if (this.state.isEnabled) {
       if (this.state.mouseClick && this.state.mouseMove && this.state.mousePosPrev) {
-         // send line to to the server
-         this.props.socket.emit('draw_line', { line: [ this.state.mousePos, this.state.mousePosPrev ] });
-         this.setState({mouseMove: true});
+        let line = [ this.state.mousePos, this.state.mousePosPrev ];
+        const options = {
+          event: 'draw_line',
+          line: line
+        };
+        this.draw('local', line);
+        this.props.sendP2P(options);
+        this.setState({mouseMove: true});
       }
-
       this.setState({mousePosPrev: {x: this.state.mousePos.x, y: this.state.mousePos.y}});
       setTimeout(this.mainLoop.bind(this), 10);
+    }
   }
 
-  // draw(){
-  	//  const context = this.refs.canvas.getContext('2d')
-   // 	 var width   = window.innerWidth;
-   //   var height  = window.innerHeight;
-   //   context.beginPath();
-   //    // context.moveTo(line[0].x * width, line[0].y * height);
-   //    // context.lineTo(line[1].x * width, line[1].y * height);
-   //   context.moveTo(40, 30);
-   //   context.lineTo(45, 42);
-   //   context.stroke();
-   // };
+  draw(client, line) {
+    const canvas = this.refs.canvas
+    const context = this.refs.canvas.getContext('2d')
+    var width   = window.innerWidth;
+    var height  = window.innerHeight;
+    context.strokeStyle = (client === 'local') ? '#df4b26' : '#0000FF';
+    context.lineJoin = "round";
+    context.lineWidth = 5;
+    context.beginPath();
+    context.moveTo(line[0].x - canvas.offsetLeft, line[0].y - canvas.offsetTop);
+    context.lineTo(line[1].x - canvas.offsetLeft, line[1].y - canvas.offsetTop);
+    context.stroke();
+  }
   
+  componentDidMount() {
+    this.props.socket.on('draw_line', data => this.draw('remote', data.line));
+    this.state.isEnabled = true;
+    this.mainLoop();
+  }
 
-	componentDidMount() {
-		// this.draw()
-
-	 const canvas = this.refs.canvas
-	 const context = this.refs.canvas.getContext('2d')
-   var width   = window.innerWidth;
-   var height  = window.innerHeight;
-
-
-	 this.props.socket.on('draw_line', function (data) {
-    console.log('hi')
-	 		context.strokeStyle = "#df4b26";
-  context.lineJoin = "round";
-  context.lineWidth = 5;
-      context.beginPath();
-      // context.moveTo(data.line[0].x * width, data.line[0].y * height);
-      // context.lineTo(data.line[1].x * width, data.line[1].y * height);
-      context.moveTo(data.line[0].x - canvas.offsetLeft, data.line[0].y - canvas.offsetTop);
-      context.lineTo(data.line[1].x - canvas.offsetLeft, data.line[1].y - canvas.offsetTop);
-
-      // context.moveTo(data.line[0].x, data.line[0].y);
-      // context.lineTo(data.line[1].x, data.line[1].y);
-
-      context.stroke();
-   });
-
-	 this.mainLoop();
-
-	}
-
-
-
- 
+  componentWillUnmount() {
+    this.state.isEnabled = false;
+  }
 
   render() {
     return (
@@ -95,10 +77,6 @@ class WhiteBoard extends React.Component {
       	onMouseDown={this.handleMouseDown.bind(this)} ref="canvas" width={window.innerWidth} height={window.innerHeight}/>
     );
   }
-
-
 }
-
-
 
 export default WhiteBoard;

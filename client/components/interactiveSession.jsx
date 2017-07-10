@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Whiteboard from './whiteboard.jsx';
+import Chat from './chat.jsx';
 
-const InteractiveSession = (props) => (
+
+const InteractiveSession = ({user, partner, socket, signOff, sendP2P}) => (
   <div className='interactive'>
-    <Whiteboard socket={props.socket}/>
+    <button onClick={signOff} type="button" className="btn btn-xs btn-primary isession_button">Exit Session</button> 
+    <Whiteboard socket={socket} sendP2P={sendP2P}/>
+    <Chat user={user} partner={partner} socket={socket} sendP2P={sendP2P} /> 
   </div>
 );
 

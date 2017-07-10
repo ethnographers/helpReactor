@@ -16,13 +16,11 @@ module.exports = server => {
   const students = {};
   const mentors = {};
   const admins = {};
-  const line_history = [];
 
   io.on('connection', socket => {
     let id = socket.handshake.query.id;
     let role = socket.handshake.query.role;
 
-    // Update user online status in db
     updateUserOnlineStatus(id, true);
     
     if (role === 'student') {
@@ -70,24 +68,14 @@ module.exports = server => {
         });
     });
 
-    // first send the history to the new client
-    for (var i in line_history) {
-      socket.emit('draw_line', { line: line_history[i] });
-    }
+    socket.on('p2p', (options) => {
+      console.log(
+        `server got p2p:${options.event} from:${options.from} to:${options.to} for ${options.event}`
+      );
+      const sockets = (options.to.role == 'student') ?
+            students[options.to.id] : mentors[options.to.id];
+      sockets.forEach(socket => socket.emit(options.event, options));
 
-    // add handler for message type "draw_line".
-    socket.on('draw_line', function(data) {
-      console.log('data from client', data)
-      // add received line to history 
-      line_history.push(data.line);
-      // send line to all clients
-      io.emit('draw_line', { line: data.line });
-    });
-
-    socket.on('start interactive session', function(data) {
-      console.log('start interactive session', data)
-
-      io.emit('start interactive session', data);
     });
 
     // logic has flaws
@@ -100,7 +88,6 @@ module.exports = server => {
 
     socket.on('disconnect', socket => {
 
-      // Update user online status in db
       updateUserOnlineStatus(id, false);
 
       if (role === 'student') {
@@ -119,5 +106,5 @@ module.exports = server => {
     });
 
   });
+ }
 
-};

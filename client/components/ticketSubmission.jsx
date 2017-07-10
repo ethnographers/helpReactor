@@ -7,16 +7,29 @@ class TicketSubmission extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: ''
-    }
-    this.clickSeating = (evt) => {this.setState({location: evt.target.getAttribute('data-location')})};
-    this.handleLocationChange = (evt) => {this.setState({location: evt.target.value})}
+      location: '',
+    };
+
+    this.clickSeating = (evt) => { this.setState({location: evt.target.getAttribute('data-location')}); };
+    this.handleLocationChange = (evt) => { this.setState({location: evt.target.value}); };
   }
 
   render() {
     return (
 
       <form className="ticket_submission_form">
+        <div className="col-xs-4">
+          <button
+            type="button"
+            className="btn btn-primary"
+            style={{position: 'absolute' , top: 77 , left: 882, zIndex: 1200}}
+            data-toggle="modal"
+            data-target="#myModalFeedback"
+          >
+            Rate Your Latest Experience
+          </button>
+        </div> 
+
         <div className="form-group row">
           <div className="col-xs-12"><h3>Create a ticket</h3></div>
         </div>
@@ -32,9 +45,11 @@ class TicketSubmission extends React.Component {
           <div className="col-xs-5">
             <label htmlFor="ticket_submission_location">Location</label>
             <div className="input-group">
-            <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={this.state.location} onChange={this.handleLocationChange}/>
+              <input type="text" id="ticket_submission_location" className="form-control" name="location" placeholder={'Your station number'} value={this.state.location} onChange={this.handleLocationChange}/>
               <span className="input-group-btn">
-                    <SeatingChart clickSeating={this.clickSeating}/>
+
+                <SeatingChart clickSeating={this.clickSeating.bind(this)}/>
+
 
                 <button
                   type="button"
@@ -43,6 +58,7 @@ class TicketSubmission extends React.Component {
                   data-target="#myModal">
                   Use Seating Chart
                 </button>
+                
               </span>
             </div>
           </div>  
@@ -68,14 +84,8 @@ class TicketSubmission extends React.Component {
       </form>
     );
   }
-
-
-
-
 }
 
 // const TicketSubmission = ({submitTickets, ticketCategoryList, location, handleLocationChange}) => (
 
 export default TicketSubmission;
-          // <label><input type="checkbox" id="is_private" value=""/></label>
-
